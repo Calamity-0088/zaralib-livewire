@@ -14,8 +14,11 @@
         <x-app-logo href="{{ route('mangas.index') }}" wire:navigate />
 
         <flux:navbar class="-mb-px max-lg:hidden">
-            <flux:navbar.item icon="book-open" :href="route('mangas.index')" :current="request()->routeIs('mangas.index')" wire:navigate>
-                {{ __('messages.navigation.index') }}
+            <flux:navbar.item icon="rocket-launch" :href="route('mangas.index')" :current="request()->routeIs('mangas.index')" wire:navigate>
+                {{ __('Explorar') }}
+            </flux:navbar.item>
+            <flux:navbar.item icon="book-open" :href="route('mangas.library')" :current="request()->routeIs('mangas.library')" wire:navigate>
+                {{ __('Mi biblioteca') }}
             </flux:navbar.item>
             <flux:navbar.item icon="layout-grid" :href="route('dashboard')" :current="request()->routeIs('dashboard')" wire:navigate>
                 {{ __('Dashboard') }}

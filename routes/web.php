@@ -8,6 +8,7 @@ Route::view('/', 'welcome')->name('home');
 Route::middleware(['auth', 'verified'])->group(function () {
     Route::view('dashboard', 'dashboard')->name('dashboard');
     Route::livewire('/mangas', 'pages::index-manga')->name('mangas.index');
+    Route::livewire('/mangas/library', 'pages::library-manga')->name('mangas.library');
     Route::livewire('/mangas/create', 'pages::create-manga')->name('mangas.create');
     Route::livewire('/mangas/{id}', 'pages::show-manga')->name('mangas.show');
     Route::livewire('/mangas/{id}/edit', 'pages::edit-manga')->name('mangas.edit');

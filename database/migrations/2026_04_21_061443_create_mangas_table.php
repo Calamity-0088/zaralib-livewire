@@ -20,7 +20,6 @@ return new class extends Migration
             $table->integer('volumes')->nullable();
             $table->integer('chapters')->nullable();
             $table->enum('status', ['ongoing', 'completed', 'hiatus', 'cancelled', 'not_yet_released']);
-            $table->decimal('rating', 3, 1)->nullable();
             $table->date('start_date')->nullable();
             $table->date('end_date')->nullable();
             $table->string('cover_image')->nullable();

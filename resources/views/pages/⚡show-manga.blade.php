@@ -2,6 +2,7 @@
 
 use Livewire\Component;
 use App\Models\Manga;
+use Livewire\Attributes\Computed;
 
 new class extends Component {
     public $id;
@@ -27,6 +28,30 @@ new class extends Component {
         }
     }
 
+    #[Computed]
+    public function isAdmin()
+    {
+        return auth()->user()->role === 'admin';
+    }
+
+    #[Computed]
+    public function hasManga()
+    {
+        return auth()->user()->mangas()->where('mangas.id', $this->id)->exists();
+    }
+
+    public function addToLibrary()
+    {
+        /* $manga = Manga::find($this->id); */
+        auth()->user()->mangas()->attach($this->id);
+    }
+
+    public function removeFromLibrary()
+    {
+        /* $manga = Manga::find($id); */
+        auth()->user()->mangas()->detach($this->id);
+    }
+
     public function delete()
     {
         $manga = Manga::findOrFail($this->id);
@@ -46,33 +71,60 @@ new class extends Component {
         <div class="flex flex-col gap-8 md:flex-row md:items-start">
             <div class="flex flex-col gap-8 md:w-2/3">
                 <div class="flex flex-col gap-8 md:flex-row">
-                    <div class="h-70 flex items-start justify-center overflow-hidden rounded-md md:w-2/5">
+                    <div class="h-70 flex flex-col items-center gap-4 overflow-hidden rounded-md md:w-2/5">
                         <img class="h-full" src="{{ Storage::url($cover_image) }}" alt="">
+                        @if ($this->hasManga)
+                            <flux:modal.trigger name="edit-entry">
+                                <flux:button class="text-green-200! w-full grow" variant="ghost" size="sm">Editar entrada</flux:button>
+                            </flux:modal.trigger>
+                        @endif
                     </div>
+                    <flux:modal class="flex flex-col gap-6" name=edit-entry>
+                        <flux:heading>Editar entrada</flux:heading>
+                        <livewire:edit-entry :id=$id></livewire:edit-entry>
+                    </flux:modal>
                     <div class="md:w-3/5">
                         <p>{{ $synopsis }}</p>
                     </div>
                 </div>
-                <div class="flex gap-4 text-sm">
-                    <flux:button class="grow bg-green-300 hover:bg-green-200 focus:bg-green-100"
-                        href="{{ route('mangas.edit', $id) }} " variant="primary" wire:navigate>
-                        {{ __('messages.actions.edit') }}</flux:button>
-                    <flux:modal.trigger name="delete">
-                        <flux:button class="grow bg-green-300 hover:bg-green-200 focus:bg-green-100"
-                            x="Are you sure you want to delete this manga?" variant="primary">
-                            {{ __('messages.actions.delete') }}
-                        </flux:button>
-                    </flux:modal.trigger>
+                {{-- * Buttons --}}
+                <div class="flex flex-wrap gap-4">
+                    <div class="flex w-full gap-4">
+                        @if ($this->hasManga)
+                            <flux:button class="grow bg-green-300 hover:bg-green-200 focus:bg-green-100" variant="primary"
+                                wire:click="removeFromLibrary">
+                                Eliminar de la biblioteca
+                            </flux:button>
+                        @else
+                            <flux:button class="grow bg-green-300 hover:bg-green-200 focus:bg-green-100" variant="primary" wire:click="addToLibrary">
+                                Añadir a la biblioteca
+                            </flux:button>
+                        @endif
+                    </div>
 
-                    <flux:modal name="delete">
-                        <div class="flex flex-col gap-4">
-                            <flux:heading size="lg">Delete manga</flux:heading>
-                            <flux:text>Are you sure you want to delete this manga?</flux:text>
-                            <flux:button wire:click="delete" variant="danger">Delete</flux:button>
+                    @if ($this->isAdmin)
+                        <div class="flex w-full gap-4">
+                            <flux:button class="grow bg-green-300 hover:bg-green-200 focus:bg-green-100" href="{{ route('mangas.edit', $id) }} "
+                                variant="primary" wire:navigate>
+                                {{ __('messages.actions.edit') }}</flux:button>
+                            <flux:modal.trigger name="delete">
+                                <flux:button class="grow bg-green-300 hover:bg-green-200 focus:bg-green-100" variant="primary">
+                                    {{ __('messages.actions.delete') }}
+                                </flux:button>
+                            </flux:modal.trigger>
                         </div>
-                    </flux:modal>
+
+                        <flux:modal name="delete">
+                            <div class="flex flex-col gap-4">
+                                <flux:heading size="lg">Delete manga</flux:heading>
+                                <flux:text>Are you sure you want to delete this manga?</flux:text>
+                                <flux:button wire:click="delete" variant="danger">Delete</flux:button>
+                            </div>
+                        </flux:modal>
+                    @endif
                 </div>
             </div>
+
             <flux:card class="flex w-full flex-col gap-6 rounded-md p-6 text-sm md:w-1/3">
                 <flux:heading>{{ __('messages.manga.details') }}</flux:heading>
                 <div class="flex flex-col gap-2">

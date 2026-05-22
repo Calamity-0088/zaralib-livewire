@@ -1,39 +1,24 @@
 <?php
 
-use Livewire\Attributes\Url;
-use Livewire\Attributes\Computed;
 use Livewire\Component;
-use App\Models\Manga;
+use Livewire\Attributes\Computed;
 
 new class extends Component {
-    #[Url]
-    public $query;
-
     #[Computed]
-    public function mangas()
+    public function libraryMangas()
     {
-        if ($this->query) {
-            return Manga::where('title', 'like', "%$this->query%")->get();
-        }
-        return Manga::all();
-    }
-
-    public function mangaEntry($mangaId)
-    {
-        return auth()->user()->mangas()->where('mangas.id', $mangaId)->first();
+        return auth()->user()->mangas()->get();
     }
 };
 ?>
 
 <div class="flex flex-col gap-8">
     <div class="flex w-full items-center justify-between">
-        <flux:heading class="font-bold! text-green-200" size="xl" level="1">{{ __('messages.ui.title') }} </flux:heading>
-        <flux:button class="bg-green-300 hover:bg-green-200" href="{{ route('mangas.create') }}" variant="primary" wire:navigate>
-            {{ __('messages.actions.add') }}</flux:button>
+        <flux:heading class="font-bold! text-green-200" size="xl" level="1">{{ __('Mi biblioteca') }} </flux:heading>
     </div>
-    @if ($this->mangas->count() > 0)
+    @if ($this->libraryMangas->count() > 0)
         <div class="flex w-full flex-wrap gap-4 dark:text-zinc-200">
-            @foreach ($this->mangas as $manga)
+            @foreach ($this->libraryMangas as $manga)
                 <flux:card class="h-60 w-2/5 shrink grow overflow-hidden rounded-md bg-zinc-900 p-0 md:w-40">
                     <div class="relative h-4/5">
                         <a class="absolute inset-0 hover:bg-black/25" href="{{ route('mangas.show', $manga->id) }}" wire:navigate></a>
@@ -45,7 +30,7 @@ new class extends Component {
                         <span class="w-2/3 truncate">{{ $manga->title }}</span>
                         <div class="flex w-1/3 items-center justify-end gap-2">
                             <i class="size-3 shrink-0" data-lucide="star"></i>
-                            <span class="text-green-200">{{ $this->mangaEntry($manga->id)->pivot->rating ?? 'N/A' }}</span>
+                            <span class="text-green-200">{{ $manga->pivot->rating ?? 'N/A' }}</span>
                         </div>
                     </div>
                 </flux:card>

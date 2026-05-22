@@ -31,7 +31,7 @@ class MangaFactory extends Factory
             'volumes' => $this->faker->numberBetween(1, 50),
             'chapters' => $this->faker->numberBetween(10, 900),
             'status' => $status,
-            'rating' => $this->faker->randomFloat(1, 1, 10),
+            /*             'rating' => $this->faker->randomFloat(1, 1, 10), */
             'start_date' => $startDate,
             'end_date' => in_array($status, ['completed', 'cancelled'])
                 ? $endDate
