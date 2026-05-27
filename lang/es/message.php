@@ -2,7 +2,8 @@
 
 return [
     'navigation' => [
-        'index' => 'Mis mangas',
+        'index' => 'Explorar',
+        'library' => 'Mi biblioteca',
         'search' => 'Buscar',
         'language' => 'Idioma',
         'settings' => 'Ajustes',
@@ -12,6 +13,9 @@ return [
         'add' => 'Añadir manga',
         'edit' => 'Editar',
         'delete' => 'Eliminar',
+        'add_library' => 'Añadir a la biblioteca',
+        'delete_library' => 'Eliminar de la biblioteca',
+        'edit_entry' => 'Editar entrada',
         'save' => 'Guardar',
         'file' => 'Seleccionar archivo',
         'files' => 'Seleccionar archivos',
@@ -24,7 +28,9 @@ return [
         'enable_2fa' => 'Activar 2FA',
         'cancel' => 'Cancelar',
         'continue' => 'Continuar',
-        'close' => 'Cerrar'
+        'close' => 'Cerrar',
+        'login' => 'Iniciar sesión',
+        'signup' => 'Registrarse'
 
     ],
     'manga' => [
@@ -47,7 +53,6 @@ return [
         'ongoing' => 'En curso',
     ],
     'ui' => [
-        'title' => 'Mi colección',
         'add' => 'Agregar manga',
         'edit' => 'Editar manga',
         'add_description' => 'Ingresa la información para crear un manga',
@@ -63,6 +68,8 @@ return [
         'new_password' => 'Contraseña nueva',
         'confirm_password' => 'Confirmar contraseña',
         'manual_code' => 'o bien, introduce el código manualmente',
+        'remember' => 'Recuérdame'
+
     ],
     'settings' => [
         'title' => 'Ajustes',
@@ -87,6 +94,12 @@ return [
         '2fa_enable_title' => 'Activar autenticación de doble factor',
         '2fa_enable_description' => 'Para completar la activación de la autenticación de dos factores, escanea el código QR o introduce la clave de configuración en tu aplicación de autenticación.',
     ],
-    'auth' => []
+    'auth' => [
+        'login_title' => 'Inicia sesión en tu cuenta',
+        'login_description' => 'Introduce tu correo electrónico y contraseña a continuación para iniciar sesión',
+        'forgot_password' => '¿Olvidaste tu contraseña?',
+        'not_account' => '¿No tienes una cuenta?'
+
+    ]
 
 ];

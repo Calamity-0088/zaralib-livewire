@@ -8,5 +8,5 @@ new class extends Component {
 ?>
 
 <div class="flex justify-center">
-    <livewire:manga-form form-title="{{ __('messages.ui.edit') }}" form-description="{{ __('messages.ui.edit_description') }}" :id="$id" />
+    <livewire:manga-form form-title="{{ __('manga.form.edit_title') }}" form-description="{{ __('manga.form.edit_description') }}" :id="$id" />
 </div>

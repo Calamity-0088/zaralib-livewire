@@ -15,10 +15,10 @@
 
         <flux:navbar class="-mb-px max-lg:hidden">
             <flux:navbar.item icon="rocket-launch" :href="route('mangas.index')" :current="request()->routeIs('mangas.index')" wire:navigate>
-                {{ __('Explorar') }}
+                {{ __('navigation.index') }}
             </flux:navbar.item>
             <flux:navbar.item icon="book-open" :href="route('mangas.library')" :current="request()->routeIs('mangas.library')" wire:navigate>
-                {{ __('Mi biblioteca') }}
+                {{ __('navigation.library') }}
             </flux:navbar.item>
             <flux:navbar.item icon="layout-grid" :href="route('dashboard')" :current="request()->routeIs('dashboard')" wire:navigate>
                 {{ __('Dashboard') }}
@@ -30,12 +30,12 @@
         <flux:navbar class="py-0! me-1.5 space-x-0.5 rtl:space-x-reverse">
             <livewire:search></livewire:search>
             <flux:dropdown>
-                <flux:tooltip :content="__('messages.navigation.language')" position="bottom">
+                <flux:tooltip :content="__('navigation.language')" position="bottom">
                     <flux:navbar.item icon="language"></flux:navbar.item>
                 </flux:tooltip>
                 <flux:navmenu>
-                    <flux:navmenu.item href="{{ route('locale.switch', 'es') }}">{{ __('messages.ui.es') }}</flux:navmenu.item>
-                    <flux:navmenu.item href="{{ route('locale.switch', 'en') }}">{{ __('messages.ui.en') }}</flux:navmenu.item>
+                    <flux:navmenu.item href="{{ route('locale.switch', 'es') }}">{{ __('navigation.languages.es') }}</flux:navmenu.item>
+                    <flux:navmenu.item href="{{ route('locale.switch', 'en') }}">{{ __('navigation.languages.en') }}</flux:navmenu.item>
                 </flux:navmenu>
             </flux:dropdown>
 

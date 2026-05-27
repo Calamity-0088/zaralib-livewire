@@ -8,7 +8,7 @@ use Livewire\Attributes\Validate;
 new class extends Component {
     use WithFileUploads;
 
-    public $id;
+    public $id, $manga;
     public $formTitle, $formDescription;
     #[Validate('required|string|min:3')]
     public $title;
@@ -31,9 +31,6 @@ new class extends Component {
     #[Validate('required|in:ongoing,completed,hiatus,cancelled,not_yet_released')]
     public $status;
 
-    #[Validate('nullable|numeric|max:4')]
-    public $rating;
-
     #[Validate('nullable|date')]
     public $start_date;
 
@@ -47,20 +44,11 @@ new class extends Component {
 
     public function mount($id = null)
     {
-        if ($id) {
-            $manga = Manga::findOrFail($id);
+        if ($this->id) {
+            $this->manga = Manga::findOrFail($this->id);
 
-            $this->title = $manga->title;
-            $this->synopsis = $manga->synopsis;
-            $this->author = $manga->author;
-            $this->genre = $manga->genre;
-            $this->volumes = $manga->volumes;
-            $this->chapters = $manga->chapters;
-            $this->status = $manga->status;
-            $this->rating = $manga->rating;
-            $this->start_date = $manga->start_date;
-            $this->end_date = $manga->end_date;
-            $this->current_cover = $manga->cover_image;
+            $this->fill($this->manga->toArray());
+            $this->current_cover = $this->manga->cover_image;
         }
     }
 
@@ -68,14 +56,14 @@ new class extends Component {
     {
         $this->validate();
 
-        if ($this->id != null) {
-            $manga = Manga::findOrFail($this->id);
+        if ($this->manga) {
+            $this->authorize('update', $this->manga);
 
             if ($this->new_cover && $this->current_cover) {
                 Storage::disk('public')->delete($this->current_cover);
             }
 
-            $manga->update([
+            $this->manga->update([
                 'title' => $this->title,
                 'synopsis' => $this->synopsis,
                 'author' => $this->author,
@@ -83,7 +71,6 @@ new class extends Component {
                 'volumes' => $this->volumes,
                 'chapters' => $this->chapters,
                 'status' => $this->status,
-                'rating' => $this->rating,
                 'start_date' => $this->start_date,
                 'end_date' => $this->end_date,
                 'cover_image' => $this->new_cover ? $this->new_cover->store(path: 'images', options: 'public') : $this->current_cover,
@@ -91,7 +78,9 @@ new class extends Component {
 
             return $this->redirect("/mangas/$this->id", navigate: true);
         } else {
-            $manga = Manga::create([
+            $this->authorize('create', Manga::class);
+
+            Manga::create([
                 'title' => $this->title,
                 'synopsis' => $this->synopsis,
                 'author' => $this->author,
@@ -99,7 +88,6 @@ new class extends Component {
                 'volumes' => $this->volumes,
                 'chapters' => $this->chapters,
                 'status' => $this->status,
-                'rating' => $this->rating,
                 'start_date' => $this->start_date,
                 'end_date' => $this->end_date,
                 'cover_image' => $this->new_cover ? $this->new_cover->store(path: 'images', options: 'public') : null,
@@ -107,12 +95,6 @@ new class extends Component {
 
             return $this->redirect('/mangas', navigate: true);
         }
-    }
-
-    public function delete()
-    {
-        $manga = Manga::findOrFail($this->$id);
-        $manga->delete();
     }
 };
 ?>
@@ -125,47 +107,44 @@ new class extends Component {
         </div>
         <div class="space-y-4">
             <flux:field class="flex-1">
-                <flux:input label="{{ __('messages.manga.title') }}" wire:model.live.blur="title" />
+                <flux:input label="{{ __('manga.title') }}" wire:model.live.blur="title" />
             </flux:field>
             <flux:field class="flex-1">
-                <flux:textarea label="{{ __('messages.manga.synopsis') }}" wire:model.live.blur.live.blur="synopsis" />
+                <flux:textarea label="{{ __('manga.synopsis') }}" wire:model.live.blur.live.blur="synopsis" />
             </flux:field>
             <div class="flex gap-4">
                 <flux:field class="flex-1">
-                    <flux:input label="{{ __('messages.manga.genre') }}" wire:model.live.blur="genre" />
+                    <flux:input label="{{ __('manga.genre') }}" wire:model.live.blur="genre" />
                 </flux:field>
                 <flux:field class="flex-1">
-                    <flux:input label="{{ __('messages.manga.author') }}" wire:model.live.blur="author" />
-                </flux:field>
-            </div>
-            <div class="flex gap-4">
-                <flux:field class="flex-1">
-                    <flux:input label="{{ __('messages.manga.volumes') }}" wire:model.live.blur="volumes" />
-                </flux:field>
-                <flux:field class="flex-1">
-                    <flux:input label="{{ __('messages.manga.chapters') }}" wire:model.live.blur="chapters" />
+                    <flux:input label="{{ __('manga.author') }}" wire:model.live.blur="author" />
                 </flux:field>
             </div>
             <div class="flex gap-4">
                 <flux:field class="flex-1">
-                    <flux:input label="{{ __('messages.manga.status') }}" wire:model.live.blur="status" />
+                    <flux:input label="{{ __('manga.volumes') }}" wire:model.live.blur="volumes" />
                 </flux:field>
                 <flux:field class="flex-1">
-                    <flux:input label="{{ __('messages.manga.rating') }}" wire:model.live.blur="rating" />
+                    <flux:input label="{{ __('manga.chapters') }}" wire:model.live.blur="chapters" />
                 </flux:field>
             </div>
             <div class="flex gap-4">
                 <flux:field class="flex-1">
-                    <flux:input type="date" label="{{ __('messages.manga.start_date') }}" wire:model.live.blur="start_date" />
+                    <flux:input label="{{ __('manga.status') }}" wire:model.live.blur="status" />
+                </flux:field>
+            </div>
+            <div class="flex gap-4">
+                <flux:field class="flex-1">
+                    <flux:input type="date" label="{{ __('manga.start_date') }}" wire:model.live.blur="start_date" />
                 </flux:field>
                 <flux:field class="flex-1">
-                    <flux:input type="date" label="{{ __('messages.manga.end_date') }}" wire:model.live.blur="end_date" />
+                    <flux:input type="date" label="{{ __('manga.end_date') }}" wire:model.live.blur="end_date" />
                 </flux:field>
             </div>
         </div>
         <div class="space-y-4">
-            <flux:input type="file" wire:model="new_cover" label="{{ __('messages.manga.cover_image') }}" placeholder="iwi" text="...x" />
-            <flux:button class="bg-green-300" type="submit" variant="primary">{{ __('messages.actions.save') }}
+            <flux:input type="file" wire:model="new_cover" label="{{ __('manga.cover_image') }}" placeholder="iwi" text="...x" />
+            <flux:button class="bg-green-300" type="submit" variant="primary">{{ __('common.actions.save') }}
             </flux:button>
         </div>
     </flux:card>

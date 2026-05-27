@@ -3,12 +3,12 @@
 
     <flux:heading class="sr-only">{{ __('Profile settings') }}</flux:heading>
 
-    <x-settings.layout :heading="__('messages.settings.profile')" :subheading="__('messages.settings.description')">
+    <x-settings.layout :heading="__('settings.tabs.profile')" :subheading="__('settings.profile.description')">
         <form class="my-6 w-full space-y-6" wire:submit="updateProfileInformation">
-            <flux:input type="text" wire:model="name" :label="__('messages.ui.name')" required autofocus autocomplete="name" />
+            <flux:input type="text" wire:model="name" :label="__('common.form.name')" required autofocus autocomplete="name" />
 
             <div>
-                <flux:input type="email" wire:model="email" :label="__('messages.ui.email')" required autocomplete="email" />
+                <flux:input type="email" wire:model="email" :label="__('common.form.email')" required autocomplete="email" />
 
                 @if ($this->hasUnverifiedEmail)
                     <div>
@@ -25,7 +25,7 @@
             </div>
 
             <div class="flex items-center gap-4">
-                <flux:button type="submit" variant="primary">{{ __('messages.actions.save') }}</flux:button>
+                <flux:button type="submit" variant="primary">{{ __('common.actions.save') }}</flux:button>
             </div>
         </form>
 

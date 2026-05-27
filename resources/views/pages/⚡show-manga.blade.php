@@ -5,33 +5,13 @@ use App\Models\Manga;
 use Livewire\Attributes\Computed;
 
 new class extends Component {
-    public $id;
-    public $formTitle, $formDescription;
-    public $title, $synopsis, $author, $genre, $volumes, $chapters, $status, $rating, $start_date, $end_date, $cover_image;
+    public $id, $manga;
 
     public function mount($id)
     {
-        if ($id) {
-            $manga = Manga::findOrFail($id);
-
-            $this->title = $manga->title;
-            $this->synopsis = $manga->synopsis;
-            $this->author = $manga->author;
-            $this->genre = $manga->genre;
-            $this->volumes = $manga->volumes;
-            $this->chapters = $manga->chapters;
-            $this->status = $manga->status;
-            $this->rating = $manga->rating;
-            $this->start_date = $manga->start_date;
-            $this->end_date = $manga->end_date;
-            $this->cover_image = $manga->cover_image;
+        if ($this->id) {
+            $this->manga = Manga::findOrFail($this->id);
         }
-    }
-
-    #[Computed]
-    public function isAdmin()
-    {
-        return auth()->user()->role === 'admin';
     }
 
     #[Computed]
@@ -42,21 +22,22 @@ new class extends Component {
 
     public function addToLibrary()
     {
-        /* $manga = Manga::find($this->id); */
         auth()->user()->mangas()->attach($this->id);
     }
 
     public function removeFromLibrary()
     {
-        /* $manga = Manga::find($id); */
         auth()->user()->mangas()->detach($this->id);
     }
 
     public function delete()
     {
-        $manga = Manga::findOrFail($this->id);
-        Storage::disk('public')->delete($manga->cover_image);
-        $manga->delete();
+        $this->authorize('update', $this->manga);
+
+        if ($this->manga->cover_image) {
+            Storage::disk('public')->delete($this->manga->cover_image);
+        }
+        $this->manga->delete();
 
         return $this->redirect('/mangas', navigate: true);
     }
@@ -66,25 +47,26 @@ new class extends Component {
 <div class="flex justify-center p-8 text-zinc-200">
     <div class="flex flex-col gap-8 md:w-2/3">
         <div class="flex items-center justify-center gap-4 text-green-200 md:justify-start">
-            <h1 class="text-3xl font-bold">{{ $title }}<span class="ml-4 text-lg">{{ $end_date }}</span></h1>
+            <h1 class="text-3xl font-bold">{{ $manga->title }}<span class="ml-4 text-lg">{{ $manga->end_date }}</span></h1>
         </div>
         <div class="flex flex-col gap-8 md:flex-row md:items-start">
             <div class="flex flex-col gap-8 md:w-2/3">
                 <div class="flex flex-col gap-8 md:flex-row">
                     <div class="h-70 flex flex-col items-center gap-4 overflow-hidden rounded-md md:w-2/5">
-                        <img class="h-full" src="{{ Storage::url($cover_image) }}" alt="">
+                        <img class="h-full" src="{{ Storage::url($manga->cover_image) }}" alt="">
                         @if ($this->hasManga)
                             <flux:modal.trigger name="edit-entry">
-                                <flux:button class="text-green-200! w-full grow" variant="ghost" size="sm">Editar entrada</flux:button>
+                                <flux:button class="text-green-200! w-full grow" variant="ghost" size="sm">
+                                    {{ __('manga.actions.edit_entry') }}</flux:button>
                             </flux:modal.trigger>
                         @endif
                     </div>
                     <flux:modal class="flex flex-col gap-6" name=edit-entry>
-                        <flux:heading>Editar entrada</flux:heading>
+                        <flux:heading>{{ __('manga.actions.edit_entry') }}</flux:heading>
                         <livewire:edit-entry :id=$id></livewire:edit-entry>
                     </flux:modal>
                     <div class="md:w-3/5">
-                        <p>{{ $synopsis }}</p>
+                        <p>{{ $manga->synopsis }}</p>
                     </div>
                 </div>
                 {{-- * Buttons --}}
@@ -93,23 +75,23 @@ new class extends Component {
                         @if ($this->hasManga)
                             <flux:button class="grow bg-green-300 hover:bg-green-200 focus:bg-green-100" variant="primary"
                                 wire:click="removeFromLibrary">
-                                Eliminar de la biblioteca
+                                {{ __('manga.actions.delete_library') }}
                             </flux:button>
                         @else
                             <flux:button class="grow bg-green-300 hover:bg-green-200 focus:bg-green-100" variant="primary" wire:click="addToLibrary">
-                                Añadir a la biblioteca
+                                {{ __('manga.actions.add_library') }}
                             </flux:button>
                         @endif
                     </div>
 
-                    @if ($this->isAdmin)
+                    @can('update', $manga)
                         <div class="flex w-full gap-4">
                             <flux:button class="grow bg-green-300 hover:bg-green-200 focus:bg-green-100" href="{{ route('mangas.edit', $id) }} "
                                 variant="primary" wire:navigate>
-                                {{ __('messages.actions.edit') }}</flux:button>
+                                {{ __('manga.actions.edit') }}</flux:button>
                             <flux:modal.trigger name="delete">
                                 <flux:button class="grow bg-green-300 hover:bg-green-200 focus:bg-green-100" variant="primary">
-                                    {{ __('messages.actions.delete') }}
+                                    {{ __('manga.actions.delete') }}
                                 </flux:button>
                             </flux:modal.trigger>
                         </div>
@@ -121,36 +103,36 @@ new class extends Component {
                                 <flux:button wire:click="delete" variant="danger">Delete</flux:button>
                             </div>
                         </flux:modal>
-                    @endif
+                    @endcan
                 </div>
             </div>
 
             <flux:card class="flex w-full flex-col gap-6 rounded-md p-6 text-sm md:w-1/3">
-                <flux:heading>{{ __('messages.manga.details') }}</flux:heading>
+                <flux:heading>{{ __('manga.details') }}</flux:heading>
                 <div class="flex flex-col gap-2">
                     <div class="flex gap-4">
-                        <span class="w-2/5">{{ __('messages.manga.author') }}:</span>
-                        <p>{{ $author }}</p>
+                        <span class="w-2/5">{{ __('manga.author') }}:</span>
+                        <p>{{ $manga->author }}</p>
                     </div>
                     <div class="flex gap-4">
-                        <span class="w-2/5">{{ __('messages.manga.volumes') }}:</span>
-                        <p>{{ $volumes }}</p>
+                        <span class="w-2/5">{{ __('manga.volumes') }}:</span>
+                        <p>{{ $manga->volumes }}</p>
                     </div>
                     <div class="flex gap-4">
-                        <span class="w-2/5">{{ __('messages.manga.chapters') }}:</span>
-                        <p>{{ $chapters }}</p>
+                        <span class="w-2/5">{{ __('manga.chapters') }}:</span>
+                        <p>{{ $manga->chapters }}</p>
                     </div>
                     <div class="flex gap-4">
-                        <span class="w-2/5">{{ __('messages.manga.status') }}:</span>
-                        <p>{{ $status }}</p>
+                        <span class="w-2/5">{{ __('manga.status') }}:</span>
+                        <p>{{ $manga->status }}</p>
                     </div>
                     <div class="flex gap-4">
-                        <span class="w-2/5">{{ __('messages.manga.published') }}:</span>
-                        <p>{{ $start_date }}</p>
+                        <span class="w-2/5">{{ __('manga.published') }}:</span>
+                        <p>{{ $manga->start_date }}</p>
                     </div>
                     <div class="flex gap-4">
-                        <span class="w-2/5">{{ __('messages.manga.completed') }}:</span>
-                        <p>{{ $end_date }}</p>
+                        <span class="w-2/5">{{ __('manga.completed') }}:</span>
+                        <p>{{ $manga->end_date }}</p>
                     </div>
             </flux:card>
         </div>

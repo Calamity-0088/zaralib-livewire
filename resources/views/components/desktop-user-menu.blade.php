@@ -13,13 +13,13 @@
         <flux:menu.separator />
         <flux:menu.radio.group>
             <flux:menu.item :href="route('profile.edit')" icon="cog" wire:navigate>
-                {{ __('messages.navigation.settings') }}
+                {{ __('navigation.settings') }}
             </flux:menu.item>
             <form class="w-full" method="POST" action="{{ route('logout') }}">
                 @csrf
                 <flux:menu.item class="w-full cursor-pointer" data-test="logout-button" type="submit" as="button"
                     icon="arrow-right-start-on-rectangle">
-                    {{ __('messages.navigation.logout') }}
+                    {{ __('navigation.logout') }}
                 </flux:menu.item>
             </form>
         </flux:menu.radio.group>

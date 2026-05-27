@@ -27,9 +27,11 @@ new class extends Component {
 
 <div class="flex flex-col gap-8">
     <div class="flex w-full items-center justify-between">
-        <flux:heading class="font-bold! text-green-200" size="xl" level="1">{{ __('messages.ui.title') }} </flux:heading>
-        <flux:button class="bg-green-300 hover:bg-green-200" href="{{ route('mangas.create') }}" variant="primary" wire:navigate>
-            {{ __('messages.actions.add') }}</flux:button>
+        <flux:heading class="font-bold! text-green-200" size="xl" level="1">{{ __('navigation.index') }} </flux:heading>
+        @can('create', Manga::class)
+            <flux:button class="bg-green-300 hover:bg-green-200" href="{{ route('mangas.create') }}" variant="primary" wire:navigate>
+                {{ __('manga.actions.add') }}</flux:button>
+        @endcan
     </div>
     @if ($this->mangas->count() > 0)
         <div class="flex w-full flex-wrap gap-4 dark:text-zinc-200">
@@ -42,11 +44,7 @@ new class extends Component {
                             href="{{ route('mangas.edit', $manga->id) }}"><i data-lucide="square-pen"></i></a>
                     </div>
                     <div class="flex h-1/5 w-full items-center gap-2 p-3 text-xs">
-                        <span class="w-2/3 truncate">{{ $manga->title }}</span>
-                        <div class="flex w-1/3 items-center justify-end gap-2">
-                            <i class="size-3 shrink-0" data-lucide="star"></i>
-                            <span class="text-green-200">{{ $this->mangaEntry($manga->id)->pivot->rating ?? 'N/A' }}</span>
-                        </div>
+                        <span class="truncate">{{ $manga->title }}</span>
                     </div>
                 </flux:card>
             @endforeach

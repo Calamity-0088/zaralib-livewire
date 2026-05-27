@@ -204,24 +204,24 @@ class Security extends Component
     {
         if ($this->twoFactorEnabled) {
             return [
-                'title' => __('Tmessages.settings.2fa_enabled_title'),
-                'description' => __('messages.settings.2fa_enabled_description'),
-                'buttonText' => __('messages.actions.close'),
+                'title' => __('.settings.2fa.enabled_title'),
+                'description' => __('settings.2fa.enabled_description'),
+                'buttonText' => __('common.actions.close'),
             ];
         }
 
         if ($this->showVerificationStep) {
             return [
-                'title' => __('messages.settings.2fa_enable_title'),
-                'description' => __('messages.settings.2fa_enable_description'),
-                'buttonText' => __('messages.actions.continue'),
+                'title' => __('settings.2fa.enable_title'),
+                'description' => __('settings.2fa.enable_description'),
+                'buttonText' => __('common.actions.continue'),
             ];
         }
 
         return [
-            'title' => __('messages.settings.2fa_enable_title'),
-            'description' => __('messages.settings.2fa_enable_description'),
-            'buttonText' => __('messages.actions.continue'),
+            'title' => __('settings.2fa.enable_title'),
+            'description' => __('settings.2fa.enable_description'),
+            'buttonText' => __('common.actions.continue'),
         ];
     }
 }

@@ -3,23 +3,23 @@
 
     <flux:heading class="sr-only">{{ __('Security settings') }}</flux:heading>
 
-    <x-settings.layout :heading="__('messages.settings.update')" :subheading="__('messages.settings.security_description')">
+    <x-settings.layout :heading="__('settings.security.update_password')" :subheading="__('settings.security.description')">
         <form class="mt-6 space-y-6" method="POST" wire:submit="updatePassword">
-            <flux:input type="password" wire:model="current_password" :label="__('messages.ui.current_password')" required
+            <flux:input type="password" wire:model="current_password" :label="__('common.form.current_password')" required
                 autocomplete="current-password" viewable />
-            <flux:input type="password" wire:model="password" :label="__('messages.ui.new_password')" required autocomplete="new-password" viewable />
-            <flux:input type="password" wire:model="password_confirmation" :label="__('messages.ui.confirm_password')" required
+            <flux:input type="password" wire:model="password" :label="__('common.form.new_password')" required autocomplete="new-password" viewable />
+            <flux:input type="password" wire:model="password_confirmation" :label="__('common.form.confirm_password')" required
                 autocomplete="new-password" viewable />
 
             <div class="flex items-center gap-4">
-                <flux:button data-test="update-password-button" type="submit" variant="primary">{{ __('messages.actions.save') }}</flux:button>
+                <flux:button data-test="update-password-button" type="submit" variant="primary">{{ __('common.actions.save') }}</flux:button>
             </div>
         </form>
 
         @if ($canManageTwoFactor)
             <section class="mt-12">
-                <flux:heading>{{ __('messages.settings.2fa') }}</flux:heading>
-                <flux:subheading>{{ __('messages.settings.2fa_subtitle') }}</flux:subheading>
+                <flux:heading>{{ __('settings.2fa.title') }}</flux:heading>
+                <flux:subheading>{{ __('settings.2fa.subtitle') }}</flux:subheading>
 
                 <div class="mx-auto flex w-full flex-col space-y-6 text-sm" wire:cloak>
                     @if ($twoFactorEnabled)
@@ -39,11 +39,11 @@
                     @else
                         <div class="space-y-4">
                             <flux:text variant="subtle">
-                                {{ __('messages.settings.2fa_description') }}
+                                {{ __('settings.2fa.description') }}
                             </flux:text>
 
                             <flux:button variant="primary" wire:click="enable">
-                                {{ __('messages.actions.enable_2fa') }}
+                                {{ __('settings.2fa.enable') }}
                             </flux:button>
                         </div>
                     @endif
@@ -130,7 +130,7 @@
                         <div class="relative flex w-full items-center justify-center">
                             <div class="absolute inset-0 top-1/2 h-px w-full bg-stone-200 dark:bg-stone-600"></div>
                             <span class="relative bg-white px-2 text-sm text-stone-600 dark:bg-stone-800 dark:text-stone-400">
-                                {{ __('messages.ui.manual_code') }}
+                                {{ __('settings.2fa.manual_code') }}
                             </span>
                         </div>
 

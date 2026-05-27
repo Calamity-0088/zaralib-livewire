@@ -3,11 +3,11 @@
 
     <flux:heading class="sr-only">{{ __('Appearance settings') }}</flux:heading>
 
-    <x-settings.layout :heading="__('messages.settings.appearance')" :subheading="__('messages.settings.appearance_description')">
+    <x-settings.layout :heading="__('settings.tabs.appearance')" :subheading="__('settings.appearance.description')">
         <flux:radio.group x-data variant="segmented" x-model="$flux.appearance">
-            <flux:radio value="light" icon="sun">{{ __('messages.actions.light') }}</flux:radio>
-            <flux:radio value="dark" icon="moon">{{ __('messages.actions.dark') }}</flux:radio>
-            <flux:radio value="system" icon="computer-desktop">{{ __('messages.actions.system') }}</flux:radio>
+            <flux:radio value="light" icon="sun">{{ __('settings.appearance.light') }}</flux:radio>
+            <flux:radio value="dark" icon="moon">{{ __('settings.appearance.dark') }}</flux:radio>
+            <flux:radio value="system" icon="computer-desktop">{{ __('settings.appearance.system') }}</flux:radio>
         </flux:radio.group>
     </x-settings.layout>
 </section>

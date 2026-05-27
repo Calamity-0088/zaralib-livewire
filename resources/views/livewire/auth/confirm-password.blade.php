@@ -1,17 +1,17 @@
-<x-layouts::auth :title="__('messages.ui.confirm_title')">
+<x-layouts::auth :title="__('common.form.confirm_title')">
     <div class="flex flex-col gap-6">
-        <x-auth-header :title="__('messages.ui.confirm_title')" :description="__('messages.ui.confirm_description')" />
+        <x-auth-header :title="__('common.form.confirm_title')" :description="__('common.form.confirm_description')" />
 
         <x-auth-session-status class="text-center" :status="session('status')" />
 
         <form class="flex flex-col gap-6" method="POST" action="{{ route('password.confirm.store') }}">
             @csrf
 
-            <flux:input name="password" type="password" :label="__('messages.ui.password')" required autocomplete="current-password"
-                :placeholder="__('messages.ui.password')" viewable />
+            <flux:input name="password" type="password" :label="__('common.form.password')" required autocomplete="current-password"
+                :placeholder="__('common.form.password')" viewable />
 
             <flux:button class="w-full" data-test="confirm-password-button" type="submit" variant="primary">
-                {{ __('messages.actions.confirm') }}
+                {{ __('common.actions.confirm') }}
             </flux:button>
         </form>
     </div>

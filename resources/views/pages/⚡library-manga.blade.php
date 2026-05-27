@@ -1,12 +1,23 @@
 <?php
 
 use Livewire\Component;
+use Livewire\Attributes\Url;
 use Livewire\Attributes\Computed;
 
 new class extends Component {
+    #[Url]
+    public $query;
+
     #[Computed]
     public function libraryMangas()
     {
+        if ($this->query) {
+            return auth()
+                ->user()
+                ->mangas()
+                ->where('title', 'like', "%$this->query%")
+                ->get();
+        }
         return auth()->user()->mangas()->get();
     }
 };
@@ -14,7 +25,7 @@ new class extends Component {
 
 <div class="flex flex-col gap-8">
     <div class="flex w-full items-center justify-between">
-        <flux:heading class="font-bold! text-green-200" size="xl" level="1">{{ __('Mi biblioteca') }} </flux:heading>
+        <flux:heading class="font-bold! text-green-200" size="xl" level="1">{{ __('navigation.library') }} </flux:heading>
     </div>
     @if ($this->libraryMangas->count() > 0)
         <div class="flex w-full flex-wrap gap-4 dark:text-zinc-200">
@@ -29,7 +40,7 @@ new class extends Component {
                     <div class="flex h-1/5 w-full items-center gap-2 p-3 text-xs">
                         <span class="w-2/3 truncate">{{ $manga->title }}</span>
                         <div class="flex w-1/3 items-center justify-end gap-2">
-                            <i class="size-3 shrink-0" data-lucide="star"></i>
+                            <flux:icon.star class="size-3 shrink-0" />
                             <span class="text-green-200">{{ $manga->pivot->rating ?? 'N/A' }}</span>
                         </div>
                     </div>
