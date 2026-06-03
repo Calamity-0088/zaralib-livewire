@@ -14,12 +14,21 @@ return [
     'cover_image' => 'Cover image',
     'published'   => 'Published in',
     'completed'   => 'Completed in',
+    'empty'       => 'No mangas available.',
 
     'publication_status' => [
         'ongoing'   => 'Ongoing',
         'completed' => 'Completed',
         'hiatus'    => 'On hiatus',
         'cancelled' => 'Cancelled',
+    ],
+
+    'reading_status' => [
+        'reading'   => 'Reading',
+        'pending'   => 'Pending',
+        'completed' => 'Completed',
+        'paused'    => 'On pause',
+        'abandoned' => 'Abandoned',
     ],
 
     'actions' => [
@@ -36,5 +45,6 @@ return [
         'edit_title'       => 'Edit manga',
         'add_description'  => 'Enter the information to create a manga',
         'edit_description' => 'Enter the information to edit the manga',
+        'delete_confirm'   => 'Are you sure you want to delete this manga?',
     ],
 ];

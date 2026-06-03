@@ -28,8 +28,8 @@ new class extends Component {
     #[Validate('nullable|integer|max:10000')]
     public $chapters;
 
-    #[Validate('required|in:ongoing,completed,hiatus,cancelled,not_yet_released')]
-    public $status;
+    #[Validate('required|in:ongoing,completed,hiatus,cancelled')]
+    public $status = 'ongoing';
 
     #[Validate('nullable|date')]
     public $start_date;
@@ -99,7 +99,7 @@ new class extends Component {
 };
 ?>
 
-<form class="" wire:submit="save">
+<form class="max-lg:w-full" wire:submit="save">
     <flux:card class="space-y-4">
         <div>
             <flux:heading size="lg">{{ $formTitle }}</flux:heading>
@@ -107,44 +107,52 @@ new class extends Component {
         </div>
         <div class="space-y-4">
             <flux:field class="flex-1">
-                <flux:input label="{{ __('manga.title') }}" wire:model.live.blur="title" />
+                <flux:input :label="__('manga.title')" wire:model.live.blur="title" />
             </flux:field>
             <flux:field class="flex-1">
-                <flux:textarea label="{{ __('manga.synopsis') }}" wire:model.live.blur.live.blur="synopsis" />
+                <flux:textarea :label="__('manga.synopsis')" wire:model.live.blur.live.blur="synopsis" />
             </flux:field>
-            <div class="flex gap-4">
+            <div class="flex gap-4 max-lg:flex-col">
                 <flux:field class="flex-1">
-                    <flux:input label="{{ __('manga.genre') }}" wire:model.live.blur="genre" />
+                    <flux:input :label="__('manga.genre')" wire:model.live.blur="genre" />
                 </flux:field>
                 <flux:field class="flex-1">
-                    <flux:input label="{{ __('manga.author') }}" wire:model.live.blur="author" />
+                    <flux:input :label="__('manga.author')" wire:model.live.blur="author" />
+                </flux:field>
+            </div>
+            <div class="flex gap-4 max-lg:flex-col">
+                <flux:field class="flex-1">
+                    <flux:input :label="__('manga.volumes')" wire:model.live.blur="volumes" />
+                </flux:field>
+                <flux:field class="flex-1">
+                    <flux:input :label="__('manga.chapters')" wire:model.live.blur="chapters" />
                 </flux:field>
             </div>
             <div class="flex gap-4">
-                <flux:field class="flex-1">
-                    <flux:input label="{{ __('manga.volumes') }}" wire:model.live.blur="volumes" />
-                </flux:field>
-                <flux:field class="flex-1">
-                    <flux:input label="{{ __('manga.chapters') }}" wire:model.live.blur="chapters" />
-                </flux:field>
+                <div class="flex-1">
+                    <flux:select :label="__('manga.status')" wire:model="status">
+                        <flux:select.option value="ongoing">{{ __('manga.publication_status.ongoing') }}</flux:select.option>
+                        <flux:select.option value="completed">{{ __('manga.publication_status.completed') }}</flux:select.option>
+                        <flux:select.option value="hiatus">{{ __('manga.publication_status.hiatus') }}</flux:select.option>
+                        <flux:select.option value="cancelled">{{ __('manga.publication_status.cancelled') }}</flux:select.option>
+                    </flux:select>
+                </div>
             </div>
-            <div class="flex gap-4">
+            <div class="flex gap-4 max-lg:flex-col">
                 <flux:field class="flex-1">
-                    <flux:input label="{{ __('manga.status') }}" wire:model.live.blur="status" />
-                </flux:field>
-            </div>
-            <div class="flex gap-4">
-                <flux:field class="flex-1">
-                    <flux:input type="date" label="{{ __('manga.start_date') }}" wire:model.live.blur="start_date" />
+                    <flux:input type="date" :label="__('manga.start_date')" wire:model.live.blur="start_date" />
                 </flux:field>
                 <flux:field class="flex-1">
-                    <flux:input type="date" label="{{ __('manga.end_date') }}" wire:model.live.blur="end_date" />
+                    <flux:input type="date" :label="__('manga.end_date')" wire:model.live.blur="end_date" />
                 </flux:field>
             </div>
         </div>
         <div class="space-y-4">
-            <flux:input type="file" wire:model="new_cover" label="{{ __('manga.cover_image') }}" placeholder="iwi" text="...x" />
-            <flux:button class="bg-green-300" type="submit" variant="primary">{{ __('common.actions.save') }}
+            <div class="flex">
+                <flux:input type="file" :label="__('manga.cover_image')" wire:model="new_cover" />
+            </div>
+            <flux:button class="w-full bg-green-600 hover:bg-green-700 dark:bg-green-300 dark:hover:bg-green-200" type="submit" variant="primary">
+                {{ __('common.actions.save') }}
             </flux:button>
         </div>
     </flux:card>

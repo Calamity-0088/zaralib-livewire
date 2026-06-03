@@ -1,5 +1,6 @@
 <?php
 return [
+    'navigation' => 'Navigation',
     'index'    => 'Explore',
     'library'  => 'My library',
     'search'   => 'Search',

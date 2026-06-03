@@ -41,12 +41,17 @@ new class extends Component {
 
         return $this->redirect('/mangas', navigate: true);
     }
+
+    public function render()
+    {
+        return $this->view()->title($this->manga->title);
+    }
 };
 ?>
 
-<div class="flex justify-center p-8 text-zinc-200">
+<div class="flex justify-center py-8 dark:text-zinc-200">
     <div class="flex flex-col gap-8 md:w-2/3">
-        <div class="flex items-center justify-center gap-4 text-green-200 md:justify-start">
+        <div class="flex items-center justify-center gap-4 text-green-500 md:justify-start dark:text-green-200">
             <h1 class="text-3xl font-bold">{{ $manga->title }}<span class="ml-4 text-lg">{{ $manga->end_date }}</span></h1>
         </div>
         <div class="flex flex-col gap-8 md:flex-row md:items-start">
@@ -56,15 +61,12 @@ new class extends Component {
                         <img class="h-full" src="{{ Storage::url($manga->cover_image) }}" alt="">
                         @if ($this->hasManga)
                             <flux:modal.trigger name="edit-entry">
-                                <flux:button class="text-green-200! w-full grow" variant="ghost" size="sm">
+                                <flux:button class="dark:text-green-200! text-green-500! w-full grow" variant="ghost" size="sm">
                                     {{ __('manga.actions.edit_entry') }}</flux:button>
                             </flux:modal.trigger>
                         @endif
                     </div>
-                    <flux:modal class="flex flex-col gap-6" name=edit-entry>
-                        <flux:heading>{{ __('manga.actions.edit_entry') }}</flux:heading>
-                        <livewire:edit-entry :id=$id></livewire:edit-entry>
-                    </flux:modal>
+
                     <div class="md:w-3/5">
                         <p>{{ $manga->synopsis }}</p>
                     </div>
@@ -73,12 +75,15 @@ new class extends Component {
                 <div class="flex flex-wrap gap-4">
                     <div class="flex w-full gap-4">
                         @if ($this->hasManga)
-                            <flux:button class="grow bg-green-300 hover:bg-green-200 focus:bg-green-100" variant="primary"
-                                wire:click="removeFromLibrary">
+                            <flux:button
+                                class="grow bg-green-600 hover:bg-green-700 dark:bg-green-300 dark:hover:bg-green-200 dark:focus:bg-green-100"
+                                variant="primary" wire:click="removeFromLibrary">
                                 {{ __('manga.actions.delete_library') }}
                             </flux:button>
                         @else
-                            <flux:button class="grow bg-green-300 hover:bg-green-200 focus:bg-green-100" variant="primary" wire:click="addToLibrary">
+                            <flux:button
+                                class="grow bg-green-600 hover:bg-green-700 dark:bg-green-300 dark:hover:bg-green-200 dark:focus:bg-green-100"
+                                variant="primary" wire:click="addToLibrary">
                                 {{ __('manga.actions.add_library') }}
                             </flux:button>
                         @endif
@@ -86,11 +91,12 @@ new class extends Component {
 
                     @can('update', $manga)
                         <div class="flex w-full gap-4">
-                            <flux:button class="grow bg-green-300 hover:bg-green-200 focus:bg-green-100" href="{{ route('mangas.edit', $id) }} "
-                                variant="primary" wire:navigate>
+                            <flux:button class="grow bg-green-600 hover:bg-green-700 dark:bg-green-300 dark:hover:bg-green-200 dark:focus:bg-green-100"
+                                href="{{ route('mangas.edit', $id) }} " variant="primary" wire:navigate>
                                 {{ __('manga.actions.edit') }}</flux:button>
                             <flux:modal.trigger name="delete">
-                                <flux:button class="grow bg-green-300 hover:bg-green-200 focus:bg-green-100" variant="primary">
+                                <flux:button class="grow bg-green-600 hover:bg-green-700 focus:bg-green-100 dark:bg-green-300 dark:hover:bg-green-200"
+                                    variant="primary">
                                     {{ __('manga.actions.delete') }}
                                 </flux:button>
                             </flux:modal.trigger>
@@ -98,9 +104,9 @@ new class extends Component {
 
                         <flux:modal name="delete">
                             <div class="flex flex-col gap-4">
-                                <flux:heading size="lg">Delete manga</flux:heading>
-                                <flux:text>Are you sure you want to delete this manga?</flux:text>
-                                <flux:button wire:click="delete" variant="danger">Delete</flux:button>
+                                <flux:heading size="lg">{{ __('manga.actions.delete') }}</flux:heading>
+                                <flux:text>{{ __('manga.form.delete_confirm') }}</flux:text>
+                                <flux:button wire:click="delete" variant="danger">{{ __('manga.actions.delete') }}</flux:button>
                             </div>
                         </flux:modal>
                     @endcan
@@ -124,7 +130,7 @@ new class extends Component {
                     </div>
                     <div class="flex gap-4">
                         <span class="w-2/5">{{ __('manga.status') }}:</span>
-                        <p>{{ $manga->status }}</p>
+                        <p>{{ __("manga.publication_status.$manga->status") }}</p>
                     </div>
                     <div class="flex gap-4">
                         <span class="w-2/5">{{ __('manga.published') }}:</span>
@@ -137,5 +143,5 @@ new class extends Component {
             </flux:card>
         </div>
     </div>
-</div>
+    <livewire:edit-entry :id=$id></livewire:edit-entry>
 </div>

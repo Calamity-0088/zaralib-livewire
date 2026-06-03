@@ -1,21 +1,16 @@
-# AGENTS.md
+## Commands to run tests quickly
+- `composer test` runs all PHPUnit tests.
+- To run a single test file: `vendor/bin/phpunit tests/Unit/SomeTest.php`.
 
-## Dev Commands
+## Lint and typecheck order
+- First run `composer lint` (pint). Then run `composer test`.
 
-```bash
-# Full setup (installs deps, generates key, runs migrations, builds assets)
-composer setup
+## Setup notes
+- After cloning, run `composer install` then `composer setup` for full dev environment.
 
-# Run dev server with queue, logs, and vite
-composer dev
+## Flux UI note
+- Flux UI components need the `TALL` stack with Tailwind v4.
 
-# Lint (pint)
-composer lint
-
-# Run tests
-composer test
-# Or directly: ./vendor/bin/phpunit
-```
 
 ## Key Constraints
 

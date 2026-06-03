@@ -21,7 +21,7 @@
 
             <!-- Confirm Password -->
             <flux:input name="password_confirmation" type="password" :label="__('common.form.confirm_password')" required autocomplete="new-password"
-                :placeholder="__('common.form.full_password')" viewable />
+                :placeholder="__('common.form.confirm_password')" viewable />
 
             <div class="flex items-center justify-end">
                 <flux:button class="w-full" data-test="register-user-button" type="submit" variant="primary">

@@ -12,7 +12,7 @@
 
 @php
     $classes = Flux::classes()
-        ->add('w-full flex items-center gap-4')
+        ->add('w-full flex items-center gap-4 flex-wrap overflow-hidden')
         ->add('[[data-flux-input-group]_&]:items-stretch [[data-flux-input-group]_&]:gap-0')
 
         // NOTE: We need to add relative positioning here to prevent odd overflow behaviors because of
@@ -28,7 +28,7 @@
     <input class="sr-only" type="file" tabindex="-1" x-ref="input" x-on:click.stop {{-- Without this, the parent element's click listener will ".prevent" the file input from being clicked... --}} {{ $attributes }}
         {{ $multiple ? 'multiple' : '' }} @if ($name) name="{{ $name }}" @endif>
 
-    <flux:button class="cursor-pointer" aria-hidden="true" as="div" :$size>
+    <flux:button class="shrink-0 cursor-pointer" aria-hidden="true" as="div" :$size>
         <?php if ($multiple) : ?>
         {!! __('common.file.select_many') !!}
         <?php else : ?>

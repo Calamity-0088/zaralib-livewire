@@ -25,17 +25,10 @@ new class extends Component {
 };
 ?>
 
-<div class="contents">
-    <flux:modal.trigger name="search">
-        <flux:tooltip :content="__('navigation.search')" position="bottom">
-            <flux:navbar.item class="h-10! [&>div>svg]:size-5" icon="magnifying-glass" :label="__('Search')" />
-        </flux:tooltip>
-    </flux:modal.trigger>
-    <flux:modal class="flex flex-col gap-4" name="search">
-        <flux:heading>{{ __('common.form.search_description') }}</flux:heading>
-        <flux:input.group>
-            <flux:input wire:model.live="query" placeholder="{{ __('common.form.search') }}" />
-            <flux:button wire:click="searchManga" icon="magnifying-glass"></flux:button>
-        </flux:input.group>
-    </flux:modal>
-</div>
+<flux:modal class="flex flex-col gap-4" name="search">
+    <flux:heading>{{ __('common.form.search_description') }}</flux:heading>
+    <flux:input.group>
+        <flux:input wire:model.live="query" placeholder="{{ __('common.form.search') }}" />
+        <flux:button wire:click="searchManga" icon="magnifying-glass"></flux:button>
+    </flux:input.group>
+</flux:modal>
