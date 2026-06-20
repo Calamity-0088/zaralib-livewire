@@ -5,8 +5,8 @@
     {{ filled($title ?? null) ? $title . ' | ' . config('app.name', 'Zara.Lib') : config('app.name', 'Laravel') }}
 </title>
 
-<link href="/favicon.ico" rel="icon" sizes="any">
-<link type="image/svg+xml" href="/favicon.svg" rel="icon">
+<link href="/favicon.png" rel="icon" sizes="any">
+<link type="image/svg+xml" href="/favicon.png" rel="icon">
 <link href="/apple-touch-icon.png" rel="apple-touch-icon">
 
 <link href="https://fonts.bunny.net" rel="preconnect">

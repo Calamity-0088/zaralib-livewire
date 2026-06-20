@@ -1,29 +1,25 @@
-## Commands to run tests quickly
-- `composer test` runs all PHPUnit tests.
-- To run a single test file: `vendor/bin/phpunit tests/Unit/SomeTest.php`.
+## Commands
 
-## Lint and typecheck order
-- First run `composer lint` (pint). Then run `composer test`.
+- `composer test` — full pipeline: `config:clear` → `lint:check` → PHPUnit
+- `vendor/bin/phpunit tests/Unit/SomeTest.php` — single test file
+- `composer lint` — auto-fix code style with Pint
+- `composer lint:check` — check only (no fixes)
+- `composer setup` — full new-dev setup: composer install, copy .env, key:generate, migrate, npm install, npm build
+- `composer dev` — starts server + queue + logs + Vite concurrently
+- `npm run build` / `npm run dev` — Vite build/dev
 
-## Setup notes
-- After cloning, run `composer install` then `composer setup` for full dev environment.
+## Requirements & constraints
 
-## Flux UI note
-- Flux UI components need the `TALL` stack with Tailwind v4.
-
-
-## Key Constraints
-
-- **Flux UI requires credentials**: Composer config `http-basic.composer.fluxui.dev` needs `FLUX_USERNAME` and `FLUX_LICENSE_KEY` secrets. CI adds these via `composer config http-basic.composer.fluxui.dev "$USER" "$KEY"`.
-
-- **Tests use in-memory SQLite**: PHPUnit config sets `DB_CONNECTION=sqlite` and `DB_DATABASE=:memory:`. No actual database required for tests.
-
-- **Tailwind v4**: Uses `@tailwindcss/vite` plugin, CSS is imported directly in Blade files (no traditional `resources/css/app.css`).
+- PHP ^8.3, Node 22 (CI uses Node 22, PHP 8.4 & 8.5)
+- **Flux UI requires paid credentials**: `composer config http-basic.composer.fluxui.dev "$FLUX_USERNAME" "$FLUX_LICENSE_KEY"`
+- **Tests use in-memory SQLite** — no real DB needed
+- **Tailwind v4**: configured via `@tailwindcss/vite` plugin only (no `tailwind.config.js`); CSS imported directly in Blade files
 
 ## Architecture
 
-- Laravel 13 + Livewire 4 + Flux UI
-- App root: `app/`
-- Livewire components: `app/Livewire/`
-- Models: `app/Models/`
-- Test suites: `tests/Unit/`, `tests/Feature/`
+- **Stack**: Laravel 13 + Livewire 4 + Flux UI + Laravel Fortify (auth)
+- **Livewire components**: `app/Livewire/` — standard class components (`Actions/`, `Settings/`)
+- **Volt page components**: `resources/views/pages/` — anonymous class in Blade with `⚡` prefix, no corresponding PHP file; registered via `Route::livewire('/path', 'pages::name')`
+- **Models**: `app/Models/User.php`, `app/Models/Manga.php`
+- **Routes**: `routes/web.php` (mangas CRUD, auth), `routes/settings.php` (profile, appearance, security)
+- **Tests**: `tests/Unit/`, `tests/Feature/`; `tests/TestCase.php` provides `skipUnlessFortifyHas()`

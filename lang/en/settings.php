@@ -26,7 +26,7 @@ return [
     ],
 
     '2fa' => [
-        'title'               => 'Two factor authentication',
+        'title'               => 'Two-factor authentication',
         'subtitle'            => 'Manage your two factor authentication settings',
         'description'         => 'When two factor authentication is enabled, you will be prompted for a secure PIN during login.',
         'enable'              => 'Enable 2FA',
